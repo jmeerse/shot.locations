@@ -1,0 +1,16 @@
+install.packages("dplyr")
+install.packages("ggplot2")
+install.packages("grid")
+install.packages("png")
+library(dplyr) #gotta load these at startup each time
+ library(ggplot2) #gotta load these at startup each time
+ library(grid) #gotta load these at startup each time
+ library(png) #gotta load these at startup each time
+allshots2021 <- read.csv("C:/Users/jmeer/Desktop/shot-locations/shot_locations_2021/shot spacing data 2021.csv") #edit for correct directory main spreadsheet
+View(allshots2021) #lets you see the spreadsheet
+attach(allshots2021) #allows R to interact with spreadsheet
+asx21 <- c(shot_x, PA_x, PB_x, PC_x, PD_x) #gets the x-coordinates and assigns to variable asx21 all shots x 21
+asy21 <- c(shot_y, PA_y, PB_y, PC_y, PD_y) #gets the y-coordinates and assigns to varialbe asy21 all shots y 21
+asloc21 <- c(shot.location, SPA, SPB, SPC, SPD) #ties shot location and the other 4 players together
+alstsdf21 <- data.frame(asx21, asy21, asloc21) #makes the x y and location data into dataframe
+halfcourtv2 <- rasterGrob(readPNG('halfcourtv2.png'), width=unit(1,"npc"), height=unit(1,"npc")) #sets the halfcourtv2 image likely only have to do this once

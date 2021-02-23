@@ -14,3 +14,7 @@ asy21 <- c(shot_y, PA_y, PB_y, PC_y, PD_y) #gets the y-coordinates and assigns t
 asloc21 <- c(shot.location, SPA, SPB, SPC, SPD) #ties shot location and the other 4 players together
 alstsdf21 <- data.frame(asx21, asy21, asloc21) #makes the x y and location data into dataframe
 halfcourtv2 <- rasterGrob(readPNG('halfcourtv2.png'), width=unit(1,"npc"), height=unit(1,"npc")) #sets the halfcourtv2 image likely only have to do this once
+ggplot(data = allshots2021, aes(x = shot_x, y = shot_y)) +
++ annotation_custom(halfcourtv2, 1, 7, 2.75, 7.5) +
++ geom_point() +
++ coord_cartesian(xlim = c(1, 7), ylim = c(2.75, 7.5))  #plots points in center of each region - used to check to make sure image is sized correctly

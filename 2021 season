@@ -1,20 +1,43 @@
+#install necessary packages - just once at beginning of project
 install.packages("dplyr")
 install.packages("ggplot2")
 install.packages("grid")
 install.packages("png")
+
+#at startup each time
 library(dplyr) #gotta load these at startup each time
  library(ggplot2) #gotta load these at startup each time
  library(grid) #gotta load these at startup each time
  library(png) #gotta load these at startup each time
+ 
+#get correct data - might need to alter directory path 
 allshots2021 <- read.csv("C:/Users/jmeer/Desktop/shot-locations/shot_locations_2021/shot spacing data 2021.csv") #edit for correct directory main spreadsheet
 View(allshots2021) #lets you see the spreadsheet
-attach(allshots2021) #allows R to interact with spreadsheet
-asx21 <- c(shot_x, PA_x, PB_x, PC_x, PD_x) #gets the x-coordinates and assigns to variable asx21 all shots x 21
-asy21 <- c(shot_y, PA_y, PB_y, PC_y, PD_y) #gets the y-coordinates and assigns to varialbe asy21 all shots y 21
-asloc21 <- c(shot.location, SPA, SPB, SPC, SPD) #ties shot location and the other 4 players together
-alstsdf21 <- data.frame(asx21, asy21, asloc21) #makes the x y and location data into dataframe
+
+#defining variables 
+attach(allshots2021) #allows R to interact with spreadsheet   --- probably shouldn't use this -- use 'with' instead
+
+asx21 <- with(allshots2021, c(shot_x, PA_x, PB_x, PC_x, PD_x)) #gets the x-coordinates and assigns to variable asx21 all shots x 21
+asy21 <- with(allshots2021, c(shot_y, PA_y, PB_y, PC_y, PD_y)) #gets the y-coordinates and assigns to varialbe asy21 all shots y 21 
+asloc21 <- c(allshots2021$`shot location`, allshots2021$SPA, allshots2021$SPB, allshots2021$SPC, allshots2021$SPD) #ties shot location and the other 4 players together 
+alstsdf21 <- data.frame(asx21, asy21, asloc21) #makes the x y and location data into dataframe 
+alstsdf21 <- dplyr::filter(alstsdf21, !is.na(asx21)) # removes na cells
+
+#getting court image
 halfcourtv2 <- rasterGrob(readPNG('halfcourtv2.png'), width=unit(1,"npc"), height=unit(1,"npc")) #sets the halfcourtv2 image likely only have to do this once
+
+#scatterplot of all shots
 ggplot(data = allshots2021, aes(x = shot_x, y = shot_y)) +
 + annotation_custom(halfcourtv2, 1, 7, 2.75, 7.5) +
-+ geom_point() +
-+ coord_cartesian(xlim = c(1, 7), ylim = c(2.75, 7.5))  #plots points in center of each region - used to check to make sure image is sized correctly
++ geom_point(position = "jitter") +
++ coord_cartesian(xlim = c(1, 7), ylim = c(2.75, 7.5))  #plots jittered points in each region - used to check to make sure image is sized correctly
+
+
+#heatmap of shots from position on floor "asloc21" defines location, and right now L and R don't work
+dplyr::filter(alstsdf21, asloc21 == "5" ) %>% ggplot(aes(x = asx21 , y = asy21)) + annotation_custom(halfcourtv2, 1, 7, 2.75, 7.5) + 
+geom_bin2d(bins=12, alpha = 0.7) + 
+scale_fill_gradientn(colors = c("yellow", "orange", "red")) + 
+coord_cartesian(xlim=c(1, 7), ylim=c(2.75,7.5)) + ggtitle("shot from 5")  #heat maps by shot location
+
+
+

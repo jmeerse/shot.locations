@@ -11,7 +11,7 @@ library(dplyr) #gotta load these at startup each time
  library(png) #gotta load these at startup each time
  
 #get correct data - might need to alter directory path 
-allshots2021 <- read.csv("C:/Users/jmeer/Desktop/shot-locations/shot_locations_2021/shot spacing data 2021.csv") #edit for correct directory main spreadsheet
+allshots2021 <- read.csv("C:/Users/jmeer/Desktop/shots2021/allshots4games.csv") #edit for correct directory main spreadsheet
 View(allshots2021) #lets you see the spreadsheet
 
 #defining variables 
@@ -19,7 +19,7 @@ attach(allshots2021) #allows R to interact with spreadsheet   --- probably shoul
 
 asx21 <- with(allshots2021, c(shot_x, PA_x, PB_x, PC_x, PD_x)) #gets the x-coordinates and assigns to variable asx21 all shots x 21
 asy21 <- with(allshots2021, c(shot_y, PA_y, PB_y, PC_y, PD_y)) #gets the y-coordinates and assigns to varialbe asy21 all shots y 21 
-asloc21 <- c(allshots2021$`shot location`, allshots2021$SPA, allshots2021$SPB, allshots2021$SPC, allshots2021$SPD) #ties shot location and the other 4 players together 
+asloc21 <- with(allshots2021, c(shot.location, SPA, SPB, SPC, SPD)) #ties shot location and the other 4 players together
 alstsdf21 <- data.frame(asx21, asy21, asloc21) #makes the x y and location data into dataframe 
 alstsdf21 <- dplyr::filter(alstsdf21, !is.na(asx21)) # removes na cells
 
@@ -28,9 +28,13 @@ halfcourtv2 <- rasterGrob(readPNG('halfcourtv2.png'), width=unit(1,"npc"), heigh
 
 #scatterplot of all shots
 ggplot(data = allshots2021, aes(x = shot_x, y = shot_y)) +
-+ annotation_custom(halfcourtv2, 1, 7, 2.75, 7.5) +
-+ geom_point(position = "jitter") +
-+ coord_cartesian(xlim = c(1, 7), ylim = c(2.75, 7.5))  #plots jittered points in each region - used to check to make sure image is sized correctly
+annotation_custom(halfcourtv2, 1, 7, 2.75, 7.5) +
+geom_point(position = "jitter") +
+coord_cartesian(xlim = c(1, 7), ylim = c(2.75, 7.5))  #plots jittered points in each region - used to check to make sure image is sized correctly
+
+#scattplot of all shots color coded
+ggplot(data = allshots2021, mapping = aes( x = shot_x, y = shot_y)) +annotation_custom(halfcourtv2, 1, 7, 2.75, 7.5) +geom_point(position = "jitter", aes(fill=factor(result)), size=2, shape=21, stroke=0) + scale_fill_manual(values=c("yellow2", "green", "red")) + coord_cartesian(xlim = c(1, 7), ylim = c(2.75, 7.5)) + ggtitle("all shots") + theme(plot.title = element_text(hjust = 0.5, size = 14))
+
 
 
 #heatmap of shots from position on floor "asloc21" defines location, and right now L and R don't work

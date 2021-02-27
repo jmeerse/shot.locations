@@ -33,15 +33,29 @@ geom_point(position = "jitter") +
 coord_cartesian(xlim = c(1, 7), ylim = c(2.75, 7.5))  #plots jittered points in each region - used to check to make sure image is sized correctly
 
 #scattplot of all shots color coded
-ggplot(data = allshots2021, mapping = aes( x = shot_x, y = shot_y)) +annotation_custom(halfcourtv2, 1, 7, 2.75, 7.5) +geom_point(position = "jitter", aes(fill=factor(result)), size=2, shape=21, stroke=0) + scale_fill_manual(values=c("yellow2", "green", "red")) + coord_cartesian(xlim = c(1, 7), ylim = c(2.75, 7.5)) + ggtitle("all shots") + theme(plot.title = element_text(hjust = 0.5, size = 14))
+ggplot(data = allshots2021, mapping = aes( x = shot_x, y = shot_y)) 
++ annotation_custom(halfcourtv2, 1, 7, 2.75, 7.5) 
++ geom_point(position = "jitter", aes(fill=factor(result)), size=2, shape=21, stroke=0) 
++ scale_fill_manual(values=c("yellow2", "green", "red")) 
++ coord_cartesian(xlim = c(1, 7), ylim = c(2.75, 7.5)) 
++ ggtitle("all shots") + theme(plot.title = element_text(hjust = 0.5, size = 14))
 
 
 
-#heatmap of shots from position on floor "asloc21" defines location, and right now L and R don't work
+#heatmap of shots from position on floor "asloc21" defines location
 dplyr::filter(alstsdf21, asloc21 == "5" ) %>% ggplot(aes(x = asx21 , y = asy21)) + annotation_custom(halfcourtv2, 1, 7, 2.75, 7.5) + 
 geom_bin2d(bins=12, alpha = 0.7) + 
 scale_fill_gradientn(colors = c("yellow", "orange", "red")) + 
 coord_cartesian(xlim=c(1, 7), ylim=c(2.75,7.5)) + ggtitle("shot from 5")  #heat maps by shot location
 
 
+#all shots by a particular player gotta change player number twice beginning and end
+dplyr::filter(allshots2021, shooter.number == "15") %>%  ggplot(mapping = aes( x = shot_x, y = shot_y)) 
++annotation_custom(halfcourtv2, 1, 7, 2.75, 7.5) 
++ geom_point(position = "jitter", aes(fill=factor(result)), size=2, shape=21, stroke=0) 
++  scale_fill_manual(values=c("yellow2", "green", "red")) 
++ coord_cartesian(xlim = c(1, 7), ylim = c(2.75, 7.5)) 
++ ggtitle("PLAYER 15") + theme(plot.title = element_text(hjust = 0.5, size = 14))
 
+#create subset of shots by a player  take out result == "good" if want all shots
+goodshotsby12 <- dplyr::filter(allshots2021, shooter.number == "12" & result == "good")

@@ -23,7 +23,7 @@ asloc21 <- with(allshots2021, c(shot.location, SPA, SPB, SPC, SPD)) #ties shot l
 alstsdf21 <- data.frame(asx21, asy21, asloc21) #makes the x y and location data into dataframe 
 alstsdf21 <- dplyr::filter(alstsdf21, !is.na(asx21)) # removes na cells
 
-#getting court image
+#setting court image -- make sure halfcoutv2.png is in working directory
 halfcourtv2 <- rasterGrob(readPNG('halfcourtv2.png'), width=unit(1,"npc"), height=unit(1,"npc")) #sets the halfcourtv2 image likely only have to do this once
 
 #scatterplot of all shots

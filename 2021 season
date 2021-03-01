@@ -3,28 +3,34 @@ install.packages("dplyr")
 install.packages("ggplot2")
 install.packages("grid")
 install.packages("png")
+install.packages("readr")
 
 #at startup each time
 library(dplyr) #gotta load these at startup each time
  library(ggplot2) #gotta load these at startup each time
  library(grid) #gotta load these at startup each time
  library(png) #gotta load these at startup each time
+ library(readr) #gotta load these at startup each time
  
-#get correct data - might need to alter directory path 
+#get correct data - might need to alter directory path -- command below is for Meerse personal computer
 allshots2021 <- read.csv("C:/Users/jmeer/Desktop/shots2021/allshots4games.csv") #edit for correct directory main spreadsheet
 View(allshots2021) #lets you see the spreadsheet
 
-#defining variables 
-attach(allshots2021) #allows R to interact with spreadsheet   --- probably shouldn't use this -- use 'with' instead
+#get correct data in rstudio.cloud
+allshots4games <- read_csv("allshots4games.csv")
+View(allshots2021)
 
+#setting court image -- make sure halfcoutv2.png is in working directory
+halfcourtv2 <- rasterGrob(readPNG('halfcourtv2.png'), width=unit(1,"npc"), height=unit(1,"npc")) #sets the halfcourtv2 image likely only have to do this once
+
+
+#defining variables for heat mapping
 asx21 <- with(allshots2021, c(shot_x, PA_x, PB_x, PC_x, PD_x)) #gets the x-coordinates and assigns to variable asx21 all shots x 21
 asy21 <- with(allshots2021, c(shot_y, PA_y, PB_y, PC_y, PD_y)) #gets the y-coordinates and assigns to varialbe asy21 all shots y 21 
 asloc21 <- with(allshots2021, c(shot.location, SPA, SPB, SPC, SPD)) #ties shot location and the other 4 players together
 alstsdf21 <- data.frame(asx21, asy21, asloc21) #makes the x y and location data into dataframe 
 alstsdf21 <- dplyr::filter(alstsdf21, !is.na(asx21)) # removes na cells
 
-#setting court image -- make sure halfcoutv2.png is in working directory
-halfcourtv2 <- rasterGrob(readPNG('halfcourtv2.png'), width=unit(1,"npc"), height=unit(1,"npc")) #sets the halfcourtv2 image likely only have to do this once
 
 #scatterplot of all shots
 ggplot(data = allshots2021, aes(x = shot_x, y = shot_y)) +

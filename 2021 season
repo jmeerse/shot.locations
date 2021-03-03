@@ -27,7 +27,7 @@ halfcourtv2 <- rasterGrob(readPNG('halfcourtv2.png'), width=unit(1,"npc"), heigh
 #defining variables for heat mapping
 asx21 <- with(allshots2021, c(shot_x, PA_x, PB_x, PC_x, PD_x)) #gets the x-coordinates and assigns to variable asx21 all shots x 21
 asy21 <- with(allshots2021, c(shot_y, PA_y, PB_y, PC_y, PD_y)) #gets the y-coordinates and assigns to varialbe asy21 all shots y 21 
-asloc21 <- with(allshots2021, c(shot.location, SPA, SPB, SPC, SPD)) #ties shot location and the other 4 players together
+asloc21 <- with(allshots2021, c(`shot location`, SPA, SPB, SPC, SPD)) #ties shot location and the other 4 players together
 alstsdf21 <- data.frame(asx21, asy21, asloc21) #makes the x y and location data into dataframe 
 alstsdf21 <- dplyr::filter(alstsdf21, !is.na(asx21)) # removes na cells
 

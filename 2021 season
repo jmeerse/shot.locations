@@ -64,4 +64,4 @@ annotation_custom(halfcourtv2, 1, 7, 2.75, 7.5) +
  ggtitle("PLAYER 15") + theme(plot.title = element_text(hjust = 0.5, size = 14)) 
 
 #create subset of shots by a player  take out result == "good" if want all shots
-goodshotsby12 <- dplyr::filter(allshots2021, shooter.number == "12" & result == "good")
+goodshotsby12 <- dplyr::filter(allshots2021, `shooter number` == "12" & result == "good")

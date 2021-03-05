@@ -18,7 +18,7 @@ View(allshots2021) #lets you see the spreadsheet
 
 #get correct data in rstudio.cloud
 allshots4games <- read_csv("allshots4games.csv")
-View(allshots2021)
+View(allshots4games)
 
 #setting court image -- make sure halfcoutv2.png is in working directory
 halfcourtv2 <- rasterGrob(readPNG('halfcourtv2.png'), width=unit(1,"npc"), height=unit(1,"npc")) #sets the halfcourtv2 image likely only have to do this once

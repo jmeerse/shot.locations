@@ -5,6 +5,9 @@ install.packages("grid")
 install.packages("png")
 install.packages("readr")
 
+#setting court image -- make sure halfcoutv2.png is in working directory - only have to do this once
+halfcourtv2 <- rasterGrob(readPNG('halfcourtv2.png'), width=unit(1,"npc"), height=unit(1,"npc")) #sets the halfcourtv2 image likely only have to do this once
+
 #at startup each time
 library(dplyr) #gotta load these at startup each time
  library(ggplot2) #gotta load these at startup each time
@@ -12,33 +15,32 @@ library(dplyr) #gotta load these at startup each time
  library(png) #gotta load these at startup each time
  library(readr) #gotta load these at startup each time
  
-#get correct data - might need to alter directory path -- command below is for Meerse personal computer
-allshots2021 <- read.csv("C:/Users/jmeer/Desktop/shots2021/allshots4games.csv") #edit for correct directory main spreadsheet
-View(allshots2021) #lets you see the spreadsheet
 
-#get correct data in rstudio.cloud
+
+#get correct data in rstudio.cloud  -- change name relative to latest data
 allshots4games <- read_csv("allshots4games.csv")
 View(allshots4games)
 
-#setting court image -- make sure halfcoutv2.png is in working directory
-halfcourtv2 <- rasterGrob(readPNG('halfcourtv2.png'), width=unit(1,"npc"), height=unit(1,"npc")) #sets the halfcourtv2 image likely only have to do this once
 
-
-#defining variables for heat mapping
+#defining variables for heat mapping -- change first three lines for latest data  enter each line separately 
 asx21 <- with(allshots4games, c(shot_x, PA_x, PB_x, PC_x, PD_x)) #gets the x-coordinates and assigns to variable asx21 all shots x 21
+
 asy21 <- with(allshots4games, c(shot_y, PA_y, PB_y, PC_y, PD_y)) #gets the y-coordinates and assigns to varialbe asy21 all shots y 21 
+
 asloc21 <- with(allshots4games, c(`shot location`, SPA, SPB, SPC, SPD)) #ties shot location and the other 4 players together
+
 alstsdf21 <- data.frame(asx21, asy21, asloc21) #makes the x y and location data into dataframe 
+
 alstsdf21 <- dplyr::filter(alstsdf21, !is.na(asx21)) # removes na cells
 
 
-#scatterplot of all shots
+#scatterplot of all shots - change data to latest name
 ggplot(data = allshots4games, aes(x = shot_x, y = shot_y)) +
 annotation_custom(halfcourtv2, 1, 7, 2.75, 7.5) +
 geom_point(position = "jitter") +
 coord_cartesian(xlim = c(1, 7), ylim = c(2.75, 7.5))  #plots jittered points in each region - used to check to make sure image is sized correctly
 
-#scattplot of all shots color coded
+#scattplot of all shots color coded change data 
 ggplot(data = allshots4games, mapping = aes( x = shot_x, y = shot_y)) +
 annotation_custom(halfcourtv2, 1, 7, 2.75, 7.5) +
 geom_point(position = "jitter", aes(fill=factor(result)), size=2, shape=21, stroke=0) +
@@ -55,7 +57,7 @@ scale_fill_gradientn(colors = c("yellow", "orange", "red")) +
 coord_cartesian(xlim=c(1, 7), ylim=c(2.75,7.5)) + ggtitle("shot from 5")  #heat maps by shot location
 
 
-#all shots by a particular player gotta change player number twice beginning and end
+#all shots by a particular player gotta change player number twice beginning and end  -- update to latest data
 dplyr::filter(allshots4games, shooter.number == "15") %>%  ggplot(mapping = aes( x = shot_x, y = shot_y)) +
 annotation_custom(halfcourtv2, 1, 7, 2.75, 7.5) +
  geom_point(position = "jitter", aes(fill=factor(result)), size=2, shape=21, stroke=0) +
